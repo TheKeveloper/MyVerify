@@ -1,4 +1,3 @@
-
 async function main() {
     const observer = new MutationObserver((mutations, observer) => {
         for (const mutation of mutations) {
@@ -29,7 +28,14 @@ function replaceVerified(verifiedMap) {
 }
 
 function findUsers() {
-    return findTopLevelUsers();
+    return [...findTopLevelUsers(), ...findUserPageUsers(), ...findQuoteReplyUsers()];
+}
+
+function findUserPageUsers() {
+    return Array.from(document.querySelectorAll("[data-testid='UserName']")).map(elt => {return {
+        handleText: elt.getElementsByTagName("span")[3].innerText.toString(),
+        displayName: elt.getElementsByTagName("span")[1]
+    }});
 }
 
 function findTopLevelUsers() {
@@ -42,8 +48,14 @@ function findTopLevelUsers() {
 }
 
 function findQuoteReplyUsers() {
-    // TODO: implement
-    return [];
+    return Array.from(document.querySelectorAll(`div[data-testid="UserAvatar-Container-unknown"]`))
+        .filter(elt => elt.parentElement.getElementsByTagName("span").length !== 0)
+        .map(elt => {
+            return {
+                handleText: elt.parentElement.parentElement.parentElement.parentElement.getElementsByTagName("span")[2].innerText.toString(),
+                displayName: elt.parentElement.getElementsByTagName("span")[0]
+            }
+        })
 }
 
 function getDisplayNameSpan(usernameDiv) {
