@@ -1,0 +1,12 @@
+{
+    "manifest_version": 3,
+    "name" : "MyVerify",
+    "description": "Extension for adding own verified users for Twitter",
+    "version": "1.0",
+    "content_scripts" : [
+        {
+            "matches" : ["https://twitter.com/*"],
+            "js": ["content-script.js"]
+        }
+    ]
+}
