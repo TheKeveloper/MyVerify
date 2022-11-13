@@ -20,11 +20,15 @@ async function main() {
 function replaceVerified(verifiedMap) {
     console.log("replaceVerified called"); 
     let users = findUsers();
-    users.filter(user => user.handleText in verifiedMap).forEach(user => {
-        user.displayName.style.color = "green";
-        const alias = verifiedMap[user.handleText]
-        if (alias !== null) {
-            user.displayName.innerText = alias;
+    users.forEach(user => {
+        if (user.handleText in verifiedMap) {
+            user.displayName.style.color = "green";
+            const alias = verifiedMap[user.handleText]
+            if (alias !== null) {
+                user.displayName.innerText = alias;
+            }
+        } else if (user.displayName.style.color === "green") {
+            user.displayName.style.color = "black";
         }
     });
 }
