@@ -3,10 +3,11 @@ async function main() {
     const observer = new MutationObserver((mutations, observer) => {
         for (const mutation of mutations) {
             for (const node of mutation.addedNodes) {
-              if (node.nodeType === 1) {
-                replaceVerified(verified)
-                return;
-              }
+                // slightly reduce the number of modifications to the DOM
+                if (node.nodeType === Node.ELEMENT_NODE && node.parentElement !== null && node.textContent.includes("@")) {
+                    replaceVerified(verified)
+                    return;
+                }
             }
           }
     });
@@ -17,6 +18,7 @@ async function main() {
 }
 
 function replaceVerified(verifiedMap) {
+    console.log("replaceVerified called"); 
     let users = findUsers();
     users.filter(user => user.handleText in verifiedMap).forEach(user => {
         user.displayName.style.color = "green";
