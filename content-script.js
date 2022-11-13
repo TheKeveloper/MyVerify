@@ -1,9 +1,10 @@
+var verified = {};
 async function main() {
     const observer = new MutationObserver((mutations, observer) => {
         for (const mutation of mutations) {
             for (const node of mutation.addedNodes) {
               if (node.nodeType === 1) {
-                replaceVerified({})
+                replaceVerified(verified)
                 return;
               }
             }
@@ -17,7 +18,6 @@ async function main() {
 
 function replaceVerified(verifiedMap) {
     let users = findUsers();
-    console.log(users);
     users.filter(user => user.handleText in verifiedMap).forEach(user => {
         user.displayName.style.color = "green";
         const alias = verifiedMap[user.handleText]
@@ -65,6 +65,20 @@ function getDisplayNameSpan(usernameDiv) {
 function getHandleSpan(usernameDiv) {
     return usernameDiv.children[1].getElementsByTagName("span")[0];
 }
+
+chrome.storage.sync.get(['verified'], function(result) {
+    if (result.verified !== null && result.verified !== undefined) {
+        verified = result.verified;
+    }
+    main();
+});
+
+chrome.storage.onChanged.addListener(function (changes, namespace) {
+    if ("verified" in namespace) {
+        let { _, newValue } = namespace.verified;
+        verified = newValue;
+    }
+  });
 
 main();
 
