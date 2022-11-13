@@ -67,7 +67,6 @@ function getHandleSpan(usernameDiv) {
 }
 
 chrome.storage.sync.get(['verified'], function(result) {
-    console.log("got storage", result);
     if (result.verified !== null && result.verified !== undefined) {
         verified = result.verified;
     }
