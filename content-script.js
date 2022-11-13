@@ -27,7 +27,7 @@ function replaceVerified(verifiedMap) {
             if (alias !== null) {
                 user.displayName.innerText = alias;
             }
-        } else {
+        } else if (user.displayName.style.color === "green") {
             user.displayName.style.color = "black";
         }
     });
