@@ -11,6 +11,11 @@ chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 
 document.getElementById("btn_verify").addEventListener("click",  onVerify);
 document.getElementById("btn_unverify").addEventListener("click",  onUnverify);
+document.getElementById("txt_verify_alias").addEventListener("keypress", event => {
+    if (event.key === "Enter") {
+        onVerify();
+    }
+});
 
 function onNewUrl(url) {
     let user = getTwitterUserFromUrl(url);
