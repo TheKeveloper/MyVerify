@@ -67,6 +67,7 @@ function getHandleSpan(usernameDiv) {
 }
 
 chrome.storage.sync.get(['verified'], function(result) {
+    console.log("got storage", result);
     if (result.verified !== null && result.verified !== undefined) {
         verified = result.verified;
     }
@@ -74,9 +75,16 @@ chrome.storage.sync.get(['verified'], function(result) {
 });
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
-    if ("verified" in namespace) {
-        let { _, newValue } = namespace.verified;
+    if ("verified" in changes) {
+        let { oldValue, newValue } = changes.verified;
+
         verified = newValue;
+
+        if (Object.keys(oldValue).length < Object.keys(newValue).length) {
+            replaceVerified(verified);
+        } else {
+            location.reload();
+        }
     }
   });
 
